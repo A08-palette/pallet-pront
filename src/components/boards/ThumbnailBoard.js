@@ -1,6 +1,8 @@
 import styles from "./ThumbnailBoard.module.scss";
 
-const ThumbnailBoard = () => {
+const ThumbnailBoard = (boardInfo) => {
+  console.log(boardInfo, "1111");
+  console.log(1231234);
   return (
     <div className={styles.boards_wrapper}>
       <div className={styles.thumbnail_wrapper}>
