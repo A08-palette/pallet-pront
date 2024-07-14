@@ -1,16 +1,16 @@
 import { useState } from "react";
 import axios from "axios";
+import { baseUrl } from "../App";
 
 const CreateBoard = () => {
   const [title, setTitle] = useState("");
   const [intro, setIntro] = useState("");
 
-  const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZTUiLCJyb2xlIjoiTUFOQUdFUiIsImlhdCI6MTcyMDg2MzI1MCwiZXhwIjoxODIwODYzMjUwfQ.yRE7C6FlTZtSwRZPdBBQx8iItMSNmPTud9IZ3hV6KMk";
+  const token = localStorage.getItem("accessToken");
   const createBoard = async () => {
     try {
       const response = await axios.post(
-        "/api/boards",
+        `${baseUrl}/api/boards`,
         {
           title: title,
           intro: intro,
