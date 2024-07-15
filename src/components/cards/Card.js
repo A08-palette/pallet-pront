@@ -2,6 +2,8 @@ import { useState } from "react";
 import styles from "./Card.module.scss";
 import axios from "axios";
 import { baseUrl } from "../../App";
+import { useNavigate } from "react-router-dom";
+import CardDetail from "./CardDetail";
 
 const Card = ({
   cardInfo,
@@ -10,20 +12,11 @@ const Card = ({
   getCards,
   boardSize,
 }) => {
+  const [isDetailView, setIsDetailView] = useState(false);
+
   const token = localStorage.getItem("accessToken");
 
-  const moveCard = async (cardId, newPosition) => {
-    try {
-      const response = await axios.put(
-        `${baseUrl}/api/cards/${cardId}/move?position=${newPosition}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      console.log(response);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const navigate = useNavigate();
 
   const rightMoveColumnCard = async () => {
     try {
@@ -34,8 +27,6 @@ const Card = ({
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setIsLoading(true);
-      getCards();
     } catch (err) {
       console.error(err);
     }
@@ -50,8 +41,6 @@ const Card = ({
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setIsLoading(true);
-      getCards();
     } catch (err) {
       console.error(err);
     }
@@ -70,6 +59,13 @@ const Card = ({
           <button onClick={(e) => rightMoveColumnCard()}>Right</button>
         )}
       </div>
+      <button onClick={(e) => setIsDetailView(true)}>댓글 보기</button>
+      {isDetailView ? (
+        <CardDetail
+          setIsDetailView={setIsDetailView}
+          cardId={cardInfo.cardId}
+        />
+      ) : null}
     </div>
   );
 };
