@@ -13,7 +13,7 @@ const Columns = ({ columnInfo }) => {
   const [cardList, setCardList] = useState([]);
   const [columnId, setColumnId] = useState(columnInfo.id);
 
-  console.log(columnInfo.id);
+  console.log(columnInfo);
   const token = localStorage.getItem("accessToken");
 
   useEffect(() => {
@@ -57,7 +57,6 @@ const Columns = ({ columnInfo }) => {
         }
       );
       setCardList(response.data.data);
-      console.log(response.data.data);
     } catch (err) {
       console.error(err);
     }
@@ -66,20 +65,19 @@ const Columns = ({ columnInfo }) => {
   if (isLoading) {
     return <div>로딩중입니다..</div>;
   }
-
+  console.log(typeof cardList);
   return (
     <div className={styles.column_wrapper}>
       <div className={styles.status_wrapper}>
         <h3>{columnInfo.statusName}</h3>
       </div>
       <div className={styles.card_wrapper}>
-        {Array.isArray(columnInfo.cardList) &&
-        columnInfo.cardList.length > 0 ? (
-          columnInfo.cardList.map((card) => (
+        {Object.keys(cardList).length > 0 ? (
+          Object.values(cardList).map((card) => (
             <Card key={card.id} cardInfo={card} />
           ))
         ) : (
-          <div>카드가 없습니다.</div>
+          <div>카드가 없습니다</div>
         )}
       </div>
       <div className={styles.createCard_wrapper}>
