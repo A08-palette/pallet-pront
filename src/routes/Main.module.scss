@@ -137,6 +137,19 @@
   height: 30px;
 }
 
+
+.updateButton {
+  right: 47px;
+  width: 30px;
+  height: 30px;
+}
+
+.deleteButton {
+  right: 10px;
+  width: 30px;
+  height: 30px;
+}
+
 .boardItem:hover .updateButton {
   display: block;
 }
@@ -194,8 +207,8 @@
   margin-top: 20px;
 }
 
-.modalButton1,
-.modalButton {
+
+.modalButton1, .modalButton{
   padding: 10px 20px;
   font-size: 1rem;
   cursor: pointer;
