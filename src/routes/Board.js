@@ -23,7 +23,9 @@ const customModalStyles = {
 const Board = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
+  const [worker, setWorker] = useState("");
   const [columnList, setColumnList] = useState({});
+  const [workerList, setWorkerList] = useState([]);
   const [isCreateColumnModalOpen, setIsCreateColumnModalOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -94,6 +96,19 @@ const Board = () => {
     }
   };
 
+  const getWorkerCard = async () => {
+    try {
+      const response = await axios.get(
+        `${baseUrl}/api/cards/worker?worker=${worker}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setWorkerList(response.data.data);
+      alert(response.data.message);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleColumnPositionChange = (columnId, newPosition) => {
     // Update local state immediately to reflect the change
     const updatedColumns = Object.values(columnList).map((column) =>
@@ -157,6 +172,13 @@ const Board = () => {
     <div className={styles.form}>
       <div className={styles.createBoard_wrapper}>
         <h1>{title}</h1>
+        <div className={styles.search_worker}>
+          <input
+            placeholder="조회 할 작업자를 입력하세요."
+            onChange={(e) => setWorker(e.target.value)}
+          ></input>
+          <button onClick={(e) => getWorkerCard()}>작업자의 작업 조회</button>
+        </div>
         <button onClick={openCreateColumnModal}>컬럼 등록</button>
       </div>
       <div className={styles.columnList_wrapper}>
@@ -175,7 +197,7 @@ const Board = () => {
               <Columns
                 key={column.id}
                 columnInfo={column}
-                handleColumnPositionChange={handleColumnPositionChange}
+                boardSize={columnList.length}
               />
             </div>
           ))
@@ -183,7 +205,11 @@ const Board = () => {
           <div>컬럼이 없습니다</div>
         )}
       </div>
-
+      <div>
+        {workerList.map((e) => {
+          return <div>{e.title}</div>;
+        })}
+      </div>
       {/* 컬럼 등록 모달 */}
       <Modal
         isOpen={isCreateColumnModalOpen}

@@ -13,6 +13,8 @@ const Card = ({
   boardSize,
 }) => {
   const [isDetailView, setIsDetailView] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [titleUpdate, setTitleUpdate] = useState("");
 
   const token = localStorage.getItem("accessToken");
 
@@ -46,9 +48,56 @@ const Card = ({
     }
   };
 
+  const updateTitle = async () => {
+    try {
+      const response = await axios.put(
+        `${baseUrl}/api/cards/${cardInfo.cardId}`,
+        { title: titleUpdate },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert(response.data.message);
+      console.log(response.data);
+      setIsUpdate(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const deleteCard = async () => {
+    try {
+      const response = await axios.delete(
+        `${baseUrl}/api/cards/${cardInfo.cardId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log(response);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div className={styles.cardDetail_wrapper}>
-      <div>제목:{cardInfo.title}</div>
+      <button className={styles.delete_btn} onClick={(e) => deleteCard()}>
+        카드 삭제
+      </button>
+      {!isUpdate ? (
+        <div className={styles.card_title}>
+          제목:{cardInfo.title}
+          <button onClick={(e) => setIsUpdate(true)}>제목 수정</button>
+        </div>
+      ) : (
+        <div className={styles.card_title}>
+          <input
+            onChange={(e) => setTitleUpdate(e.target.value)}
+            placeholder="수정할 제목을 입력하세요"
+          ></input>
+          <button onClick={(e) => updateTitle()}>제목 수정하기</button>
+        </div>
+      )}
       <div>내용:{cardInfo.content}</div>
       <div>작업자:{cardInfo.worker}</div>
       <div className={styles.button_wrapper}>
