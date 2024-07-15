@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styles from "./NavBar.module.scss"; // CSS Modules 스타일 시트 임포트
-import headerImg from "../../assets/헤더.png"; // 헤더 이미지 임포트
+import headerImg from "../../assets/logo1.png"; // 헤더 이미지 임포트
 import axios from "axios";
 import { baseUrl } from "../../App";
 

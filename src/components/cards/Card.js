@@ -1,7 +1,8 @@
 import styles from "./Card.module.scss";
 
 const Card = ({ cardInfo }) => {
-  console.log(cardInfo);
+  // console.log(cardInfo);
+
   return (
     <div className={styles.cardDetail_wrapper}>
       <div>title:{cardInfo.title}</div>

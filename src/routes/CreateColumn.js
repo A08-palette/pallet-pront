@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useState } from "react";
 import { baseUrl } from "../App";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const CreateColumn = () => {
   const [statusName, setStatusName] = useState("");
   const { id } = useParams();
+
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("accessToken");
   const createColumnPost = async () => {
@@ -21,7 +23,8 @@ const CreateColumn = () => {
           },
         }
       );
-      console.log(response.data);
+      navigate(`/board/${id}`);
+      alert(response.data.message);
     } catch (err) {
       console.error(err);
     }
