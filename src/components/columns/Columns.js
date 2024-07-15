@@ -94,20 +94,40 @@ const Columns = ({ columnInfo, boardSize }) => {
             <input
               placeholder="카드 제목을 입력하세요."
               onChange={(e) => setCardTitle(e.target.value)}
-            ></input>
+              className={styles.form_input}
+            />
             <input
               placeholder="카드 내용을 입력하세요."
               onChange={(e) => setCardContent(e.target.value)}
-            ></input>
+              className={styles.form_input}
+            />
             <input
               placeholder="카드 작업자를 입력하세요."
               onChange={(e) => setCardWorker(e.target.value)}
-            ></input>
-            <button onClick={(e) => createCard()}>카드 생성하기</button>
-            <button onClick={(e) => setIsCreate(false)}>뒤로 가기</button>
+              className={styles.form_input}
+            />
+            <div className={styles.button_wrapper}>
+              <button
+                onClick={(e) => createCard()}
+                className={styles.form_button}
+              >
+                🃏
+              </button>
+              <button
+                onClick={(e) => setIsCreate(false)}
+                className={styles.form_cancel_button}
+              >
+                ↩
+              </button>
+            </div>
           </div>
         ) : (
-          <button onClick={(e) => setIsCreate(true)}>카드생성</button>
+          <button
+            className={styles.form_button}
+            onClick={(e) => setIsCreate(true)}
+          >
+            카드 생성
+          </button>
         )}
       </div>
     </div>

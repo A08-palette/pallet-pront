@@ -5,11 +5,26 @@ import { baseUrl } from "../App";
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import Columns from "../components/columns/Columns";
+import Modal from "react-modal";
+import CreateColumn from "./CreateColumn";
+Modal.setAppElement("#root");
+
+const customModalStyles = {
+  content: {
+    width: "400px",
+    maxWidth: "90%",
+    height: "auto",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+  },
+};
 
 const Board = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
   const [columnList, setColumnList] = useState({});
+  const [isCreateColumnModalOpen, setIsCreateColumnModalOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -126,6 +141,14 @@ const Board = () => {
     handleColumnPositionChange(columnId, index);
   };
 
+  const openCreateColumnModal = () => {
+    setIsCreateColumnModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsCreateColumnModalOpen(false);
+  };
+
   if (isLoading) {
     return <div>로딩중입니다...</div>;
   }
@@ -134,9 +157,7 @@ const Board = () => {
     <div className={styles.form}>
       <div className={styles.createBoard_wrapper}>
         <h1>{title}</h1>
-        <button onClick={(e) => navigate(`/board/${id}/createColumn`)}>
-          컬럼 등록
-        </button>
+        <button onClick={openCreateColumnModal}>컬럼 등록</button>
       </div>
       <div className={styles.columnList_wrapper}>
         {Object.keys(columnList).length > 0 ? (
@@ -154,7 +175,6 @@ const Board = () => {
               <Columns
                 key={column.id}
                 columnInfo={column}
-                boardSize={columnList.length}
                 handleColumnPositionChange={handleColumnPositionChange}
               />
             </div>
@@ -163,6 +183,15 @@ const Board = () => {
           <div>컬럼이 없습니다</div>
         )}
       </div>
+
+      {/* 컬럼 등록 모달 */}
+      <Modal
+        isOpen={isCreateColumnModalOpen}
+        onRequestClose={closeModal}
+        style={customModalStyles}
+      >
+        <CreateColumn id={id} closeModal={closeModal} getColumns={getColumns} />
+      </Modal>
     </div>
   );
 };

@@ -14,7 +14,13 @@
   align-items: center;
   width: 600px;
 }
-
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
 .createButton {
   border: 2px solid #aac0d5; /* 테두리 색상 설정 */
   border-radius: 20px; /* 테두리 반지름 설정 */
@@ -131,6 +137,19 @@
   height: 30px;
 }
 
+
+.updateButton {
+  right: 47px;
+  width: 30px;
+  height: 30px;
+}
+
+.deleteButton {
+  right: 10px;
+  width: 30px;
+  height: 30px;
+}
+
 .boardItem:hover .updateButton {
   display: block;
 }
@@ -188,6 +207,7 @@
   margin-top: 20px;
 }
 
+
 .modalButton1, .modalButton{
   padding: 10px 20px;
   font-size: 1rem;
@@ -209,7 +229,6 @@
     background-color: #0056b3;
   }
 }
-
 
 .modalButton2 {
   background-color: #dc3545;
@@ -238,6 +257,5 @@
     &:hover {
       background-color: #c82333; /* 호버 시 배경색 */
     }
-
   }
 }
