@@ -15,27 +15,34 @@
 
 .status_wrapper {
   display: flex;
-  justify-content: center;
+  justify-content: space-between; /* 공간을 균등하게 배치 */
+  align-items: center; /* 수직 정렬 추가 */
   cursor: pointer;
 
-  button {
-    margin-left: 50px;
-    width: 100px;
-    height: 50px;
-    border: 2px solid #c1e8e1;
+  h3 {
+    margin: 0; /* 마진을 제거하여 정렬 */
+  }
+
+  .delete_button {
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    margin-left: 10px;
+    width: 60px; /* 버튼 너비 조정 */
+    height: 30px;
+    border: 2px solid #ff7675; /* 붉은색 테두리 */
     border-radius: 20px;
     background-color: transparent;
-    color: #aac0d5;
+    color: #ff7675; /* 붉은색 텍스트 */
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px; /* 버튼 글꼴 크기 조정 */
     font-weight: bold;
-    transition: background-color 0.3s ease, color 0.3s ease,
-      border-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 
     &:hover {
-      background-color: transparent;
-      border-color: #c2d9ec;
-      color: #c2d9ec;
+      background-color: #ff7675; /* 붉은색 배경 */
+      border-color: #ff7675;
+      color: white; /* 흰색 텍스트 */
     }
   }
 }
@@ -95,8 +102,7 @@
       cursor: pointer;
       font-size: 16px;
       font-weight: bold;
-      transition: background-color 0.3s ease, color 0.3s ease,
-        border-color 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 
       display: flex;
       justify-content: center;
