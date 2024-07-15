@@ -15,3 +15,17 @@
 .button_wrapper {
   display: flex;
 }
+
+.card_title {
+  display: flex;
+  button {
+    font-size: 14px;
+    width: 85px;
+    height: 30px;
+  }
+}
+
+.delete_btn {
+  background-color: #ff3114;
+  color: white;
+}
