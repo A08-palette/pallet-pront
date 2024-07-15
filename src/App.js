@@ -7,6 +7,7 @@ import CreateBoard from "./routes/CreateBoard";
 import Login from "./routes/Login";
 import Board from "./routes/Board";
 import CreateColumn from "./routes/CreateColumn";
+import UpdateBoard from "./routes/UpdateBoard.js";
 
 export const baseUrl = "http://localhost:8080";
 
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
       { path: "/login", element: <Login /> },
       { path: "/board/:id", element: <Board /> },
       { path: "/board/:id/createColumn", element: <CreateColumn /> },
+      { path: "/board/:id/update", element: <UpdateBoard /> },
     ],
   },
 ]);

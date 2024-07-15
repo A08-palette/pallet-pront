@@ -22,3 +22,14 @@
   display: flex;
   flex-wrap: wrap;
 }
+.status_wrapper {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+
+  button {
+    margin-left: 50px;
+    width: 100px;
+    height: 50px;
+  }
+}

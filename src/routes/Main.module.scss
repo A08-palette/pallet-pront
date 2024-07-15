@@ -1,24 +1,174 @@
-.form {
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* 세로 가운데 정렬 */
+  margin-top: 50px;
+  width: 100%;
+  max-width: 600px;
+  padding: 0 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.createButton {
+  border: 2px solid #aac0d5; /* 테두리 색상 설정 */
+  border-radius: 20px; /* 테두리 반지름 설정 */
+  width: 100px; /* 너비를 조정 */
+  height: 40px; /* 높이를 조정 */
+  background-color: transparent; /* 배경색 없음 */
+  color: #aac0d5; /* 텍스트 색상 설정 */
+  cursor: pointer;
+  font-size: 16px; /* 폰트 사이즈 설정 */
+  font-weight: bold; /* 폰트 두께 설정 */
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  margin-top: 50px;
+  text-align: center;
 }
 
-.createBoard_wrapper {
+.createButton:hover {
+  background-color: #aac0d5; /* hover 상태에서 배경색 변경 */
+  color: white; /* hover 상태에서 텍스트 색상 변경 */
+}
+.boardListContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* 가로 가운데 정렬 */
   width: 100%;
-  max-width: 1440px;
-  button {
-    border-radius: 50px;
-    width: 500px;
-    height: 67px;
+  max-width: 600px;
+  margin-top: 20px;
+}
+
+.boardItems {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 600px;
+  align-items: center; /* 세로 가운데 정렬 */
+}
+
+.boardItem {
+  width: 100%;
+  max-width: 600px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-5px);
   }
 }
 
-.thumbnail_wrapper {
+.boardItemContent {
+  padding: 10px;
+}
+
+.boardItemId {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.boardItemUsername {
+  position: absolute; /* 절대 위치 설정 */
+  top: 10px; /* 상단 여백 조정 */
+  right: 10px; /* 우측 여백 조정 */
+  font-size: 12px;
+  color: #666;
+}
+
+.boardItemTitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.boardItemIntro {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.boardItemDate {
+  font-size: 12px;
+  color: #999;
+}
+
+.pagination {
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pageButton {
+  border: 1px solid #007bff;
+  background-color: white;
+  color: #007bff;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #007bff;
+    color: white;
+  }
+}
+
+.activePage {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.modalTitle {
+  text-align: center;
+}
+
+.modalInput {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.modalButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+
+  &:first-child {
+    margin-right: 10px;
+  }
+
+  &:hover {
+    background-color: #0056b3;
+  }
 }

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Board.module.scss";
 import axios from "axios";
 import { baseUrl } from "../App";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import Columns from "../components/columns/Columns";
 
@@ -16,6 +16,8 @@ const Board = () => {
   const { id } = useParams();
 
   const token = localStorage.getItem("accessToken");
+
+  const columnRefs = useRef({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +33,7 @@ const Board = () => {
     };
 
     fetchData();
-  }, [id]);
+  }, []);
 
   const getBoardInfo = async () => {
     try {
@@ -53,20 +55,81 @@ const Board = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("response", response);
       setColumnList(response.data.data);
     } catch (err) {
       console.error(err);
     }
   };
 
+  const updateColumnPosition = async (columnId, newPosition) => {
+    try {
+      const response = await axios.put(
+        `${baseUrl}/api/boards/${id}/columns/${columnId}/move?position=${newPosition}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      getColumns();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleColumnPositionChange = (columnId, newPosition) => {
+    // Update local state immediately to reflect the change
+    const updatedColumns = Object.values(columnList).map((column) =>
+      column.id === columnId ? { ...column, position: newPosition } : column
+    );
+    setColumnList(updatedColumns);
+
+    // Call API to update position
+    updateColumnPosition(columnId, newPosition + 1);
+  };
+
+  const handleDragStart = (e, columnId) => {
+    // Set the data to be transferred during the drag
+    e.dataTransfer.setData("text/plain", columnId);
+  };
+
+  const handleDragOver = (e, index) => {
+    // Prevent default to allow drop
+    e.preventDefault();
+
+    // Highlight the potential drop target when the draggable element enters it
+    // (optional - for visual feedback)
+    // columnRefs.current[index].classList.add('drag-over');
+  };
+
+  const handleDragEnter = (e, index) => {
+    // Prevent default to allow drop
+    e.preventDefault();
+
+    // (optional) Add visual feedback here if desired
+  };
+
+  const handleDragLeave = (e) => {
+    // (optional) Remove visual feedback here if added in handleDragOver or handleDragEnter
+  };
+
+  const handleDrop = (e, index) => {
+    // Prevent default to allow drop
+    e.preventDefault();
+
+    // Get the columnId from the data transfer
+    const columnId = e.dataTransfer.getData("text/plain");
+
+    // Call the function to update the position
+    handleColumnPositionChange(columnId, index);
+  };
+
   if (isLoading) {
     return <div>로딩중입니다...</div>;
   }
 
-  Object.values(columnList).map((e) => {
-    console.log(e, 111);
-  });
   return (
     <div className={styles.form}>
       <div className={styles.createBoard_wrapper}>
@@ -77,8 +140,23 @@ const Board = () => {
       </div>
       <div className={styles.columnList_wrapper}>
         {Object.keys(columnList).length > 0 ? (
-          Object.values(columnList).map((column) => (
-            <Columns key={column.id} columnInfo={column} />
+          Object.values(columnList).map((column, index) => (
+            <div
+              key={column.id}
+              ref={(element) => (columnRefs.current[index] = element)}
+              draggable
+              onDragStart={(e) => handleDragStart(e, column.id)}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDragEnter={(e) => handleDragEnter(e, index)}
+              onDragLeave={(e) => handleDragLeave(e)}
+              onDrop={(e) => handleDrop(e, index)}
+            >
+              <Columns
+                key={column.id}
+                columnInfo={column}
+                handleColumnPositionChange={handleColumnPositionChange}
+              />
+            </div>
           ))
         ) : (
           <div>컬럼이 없습니다</div>
