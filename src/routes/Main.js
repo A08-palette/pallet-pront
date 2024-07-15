@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./Main.module.scss";
 import axios from "axios";
 import Modal from "react-modal";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // react-router-dom에서 useNavigate 임포트
 import { baseUrl } from "../App";
 import UpdateBoard from "./UpdateBoard"; // UpdateBoard 컴포넌트 import
 import InviteBoard from "./InviteBoard"; // InviteBoard 컴포넌트 import
@@ -31,7 +31,7 @@ const Main = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pageNumberInput, setPageNumberInput] = useState("");
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // useNavigate 훅 사용
   const token = localStorage.getItem("accessToken");
 
   useEffect(() => {
@@ -196,7 +196,11 @@ const Main = () => {
         <div className={styles.boardListContainer}>
           <div className={styles.boardItems}>
             {boardList?.data?.content.map((board) => (
-                <div key={board.boardId} className={styles.boardItem}>
+                <div
+                    key={board.boardId}
+                    className={styles.boardItem}
+                    onClick={() => navigate(`/board/${board.boardId}`)} // 클릭 시 컬럼 페이지로 이동
+                >
                   <div className={styles.boardItemContent}>
                     <div className={styles.boardItemId}>{board.boardId}</div>
                     <div className={styles.boardItemUsername}>{board.username}</div>
@@ -206,13 +210,19 @@ const Main = () => {
                   </div>
                   <div className={styles.boardItemButtons}>
                     <button
-                        onClick={() => openEditModal(board.boardId)}
+                        onClick={(e) => {
+                          e.stopPropagation(); // 부모 요소의 클릭 이벤트 전파 방지
+                          openEditModal(board.boardId);
+                        }}
                         className={styles.updateButton}
                     >
                       🔨
                     </button>
                     <button
-                        onClick={() => handleDeleteBoard(board.boardId)}
+                        onClick={(e) => {
+                          e.stopPropagation(); // 부모 요소의 클릭 이벤트 전파 방지
+                          handleDeleteBoard(board.boardId);
+                        }}
                         className={styles.deleteButton}
                     >
                       ❌

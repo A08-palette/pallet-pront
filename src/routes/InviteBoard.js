@@ -11,7 +11,7 @@ const InviteBoard = ({ boardId }) => {
     const handleInvite = async () => {
         setLoading(true);
         setError('');
-        setInviteComplete(false); // 초기화
+        setInviteComplete(false);
 
         try {
             const token = localStorage.getItem('accessToken');
@@ -26,8 +26,7 @@ const InviteBoard = ({ boardId }) => {
                 }
             );
             console.log('Invite successful:', response.data.message);
-            setInviteComplete(true); // 초대 완료 상태로 변경
-            // 성공적으로 초대한 경우 추가적인 UI 업데이트나 알림을 여기에 추가할 수 있습니다.
+            setInviteComplete(true);
         } catch (error) {
             console.error('사용자 초대 에러:', error.response);
             setError('초대에 실패하였습니다. 다시 시도해 주세요.');
@@ -36,35 +35,41 @@ const InviteBoard = ({ boardId }) => {
         }
     };
 
+    const handleChange = (e) => {
+        setInvitedUserId(e.target.value);
+    };
+
     return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
             <input
                 type="text"
                 value={invitedUserId}
-                onChange={(e) => setInvitedUserId(e.target.value)}
+                onChange={handleChange}
                 placeholder="초대할 사용자의 ID를 입력하세요."
-                style={{ width: '200px', marginLeft: '10px' }} // 입력 필드의 가로 길이와 왼쪽 여백 설정
+                style={{ width: '200px', marginLeft: '10px' }}
+                onClick={(e) => e.stopPropagation()} // 이벤트 전파 방지
+                onFocus={(e) => e.stopPropagation()} // 포커스 시 이벤트 전파 방지
             />
             <button
                 onClick={handleInvite}
                 disabled={loading}
                 style={{
                     marginLeft: '10px',
-                    width: '40px', // 정사각형 모양으로 설정
-                    height: '40px', // 정사각형 모양으로 설정
-                    border: '2px solid #fff', // 흰색 2px 테두리 설정
-                    borderRadius: '50%', // 원형 모양으로 설정
+                    width: '40px',
+                    height: '40px',
+                    border: '2px solid #fff',
+                    borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: 'transparent', // 배경은 투명하게 설정
+                    backgroundColor: 'transparent',
                     cursor: 'pointer',
-                    fontSize: '20px', // 아이콘 크기 설정
+                    fontSize: '20px',
                 }}
             >
-                {loading ? '⏰' : '📧'} {/* 초대 중일 때는 로딩 아이콘, 그렇지 않으면 이모지 */}
+                {loading ? '⏰' : '📧'}
             </button>
-            {error && <p style={{ color: 'red', marginLeft: '10px' }}>{error}</p>} {/* 에러 메시지가 있을 경우 빨간색으로 표시 */}
+            {error && <p style={{ color: 'red', marginLeft: '10px' }}>{error}</p>}
             {inviteComplete && <p style={{ color: 'green', marginLeft: '10px' }}>초대가 완료되었습니다!</p>}
         </div>
     );
