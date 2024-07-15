@@ -2,11 +2,15 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  border: 1px black solid;
+  border: 2px solid #d9e9f8;
+  border-radius: 8px;
   width: 300px;
   margin-left: 30px;
   margin-top: 10px;
   margin-bottom: 200px;
+  padding: 10px;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .status_wrapper {
@@ -18,6 +22,21 @@
     margin-left: 50px;
     width: 100px;
     height: 50px;
+    border: 2px solid #c1e8e1;
+    border-radius: 20px;
+    background-color: transparent;
+    color: #aac0d5;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease,
+      border-color 0.3s ease;
+
+    &:hover {
+      background-color: transparent;
+      border-color: #c2d9ec;
+      color: #c2d9ec;
+    }
   }
 }
 
@@ -34,10 +53,63 @@
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
 .writeCard_wrapper {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
   margin-top: 10px;
   margin-bottom: 10px;
+
+  .form_input {
+    width: 100%;
+    max-width: 300px;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #aac0d5;
+      box-shadow: 0 0 5px rgba(170, 192, 213, 0.5);
+    }
+  }
+
+  .button_wrapper {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+
+    .form_button,
+    .form_cancel_button {
+      width: 35px;
+      height: 50px;
+      margin-right: 10px;
+      background-color: transparent;
+      color: #111;
+      border: 1px solid #bdbdbe;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: background-color 0.3s ease, color 0.3s ease,
+        border-color 0.3s ease;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      &:hover {
+        background-color: #f0f0f0;
+        color: #c2d9ec;
+      }
+    }
+  }
 }

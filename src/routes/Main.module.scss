@@ -14,7 +14,13 @@
   align-items: center;
   width: 600px;
 }
-
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
 .createButton {
   border: 2px solid #aac0d5; /* 테두리 색상 설정 */
   border-radius: 20px; /* 테두리 반지름 설정 */
@@ -102,7 +108,42 @@
   font-size: 12px;
   color: #999;
 }
+.updateButton,
+.deleteButton {
+  position: absolute;
+  bottom: 10px;
+  padding: 5px;
+  border: 1px solid #d5d5d5;
+  background-color: transparent;
+  color: #c4c4c4;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 3px;
 
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+.updateButton {
+  right: 47px;
+  width: 30px;
+  height: 30px;
+}
+
+.deleteButton {
+  right: 10px;
+  width: 30px;
+  height: 30px;
+}
+
+.boardItem:hover .updateButton {
+  display: block;
+}
+
+.updateButton {
+  display: none;
+}
 .pagination {
   display: flex;
   justify-content: center;
@@ -153,16 +194,19 @@
   margin-top: 20px;
 }
 
+.modalButton1,
 .modalButton {
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modalButton1 {
   background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 4px;
-  padding: 12px 24px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
+  margin-right: 10px;
 
   &:first-child {
     margin-right: 10px;
@@ -170,5 +214,35 @@
 
   &:hover {
     background-color: #0056b3;
+  }
+}
+
+.modalButton2 {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+
+  &:first-child {
+    margin-right: 10px;
+  }
+
+  &:hover {
+    background-color: #bd2130;
+  }
+
+  .deleteButton {
+    background-color: #dc3545; /* 삭제 버튼 배경색 */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #c82333; /* 호버 시 배경색 */
+    }
   }
 }

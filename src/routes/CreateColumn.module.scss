@@ -1,0 +1,55 @@
+.createColumnContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.modalTitle {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.modalInput {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.createButton,
+.cancelButton {
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.createButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  margin-right: 10px;
+}
+
+.createButton:hover {
+  background-color: #0056b3;
+}
+
+.cancelButton {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+.cancelButton:hover {
+  background-color: #bd2130;
+}

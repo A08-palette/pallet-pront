@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Main.module.scss";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { baseUrl } from "../App";
 import Modal from "react-modal";
+import { useNavigate } from "react-router-dom"; // react-router-dom에서 useNavigate 임포트
+import { baseUrl } from "../App";
+import UpdateBoard from "./UpdateBoard"; // UpdateBoard 컴포넌트 import
+import InviteBoard from "./InviteBoard"; // InviteBoard 컴포넌트 import
 
 Modal.setAppElement("#root");
 
@@ -12,7 +14,7 @@ const customModalStyles = {
     width: "400px",
     maxWidth: "90%",
     height: "auto",
-    top: "calc(50% + 80px)", // 헤더 이미지 높이에 따라 조절
+    top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
   },
@@ -21,13 +23,15 @@ const customModalStyles = {
 const Main = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [boardList, setBoardList] = useState({ data: { content: [] } });
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [intro, setIntro] = useState("");
+  const [editBoardId, setEditBoardId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [pageNumberInput, setPageNumberInput] = useState(""); // 추가된 부분
-  const navigate = useNavigate();
+  const [pageNumberInput, setPageNumberInput] = useState("");
+  const navigate = useNavigate(); // useNavigate 훅 사용
   const token = localStorage.getItem("accessToken");
 
   useEffect(() => {
@@ -46,7 +50,7 @@ const Main = () => {
         }
       );
       setBoardList(response.data || { data: { content: [] } });
-      setTotalPages(response.data.data.totalPages); // 수정된 부분
+      setTotalPages(response.data.data.totalPages);
     } catch (error) {
       console.error("Error fetching boards:", error);
     } finally {
@@ -79,25 +83,61 @@ const Main = () => {
     }
   };
 
-  const openModal = () => {
-    setIsModalOpen(true);
+  const openCreateModal = () => {
+    setIsCreateModalOpen(true);
+  };
+
+  const openEditModal = (boardId) => {
+    setEditBoardId(boardId);
+    setIsEditModalOpen(true);
+    fetchBoard(boardId); // 보드 정보를 불러오는 함수 호출
+  };
+
+  const fetchBoard = async (boardId) => {
+    try {
+      const response = await axios.get(`${baseUrl}/api/boards/${boardId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setTitle(response.data.title);
+      setIntro(response.data.intro);
+    } catch (error) {
+      console.error("Error fetching board:", error);
+    }
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
+    setIsCreateModalOpen(false);
+    setIsEditModalOpen(false);
     setTitle("");
     setIntro("");
+    setEditBoardId(null);
+  };
+
+  const handleDeleteBoard = async (boardId) => {
+    if (window.confirm("⚠ 정말로 이 보드를 삭제하시겠습니까?")) {
+      try {
+        await axios.delete(`${baseUrl}/api/boards/${boardId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        fetchData(); // 삭제 후 데이터 다시 불러오기
+      } catch (error) {
+        console.error("Error deleting board:", error);
+      }
+    }
   };
 
   const goToPage = async (pageNumber) => {
-    console.log("goToPage 함수 호출:", pageNumber); // 함수 호출 확인용 로그 추가
     if (
       pageNumber >= 1 &&
       pageNumber <= totalPages &&
       pageNumber !== currentPage
     ) {
       setCurrentPage(pageNumber);
-      setPageNumberInput(""); // 페이지 이동 후 입력 필드 초기화
+      setPageNumberInput("");
       fetchData();
     }
   };
@@ -121,7 +161,7 @@ const Main = () => {
 
   const renderPaginationButtons = () => {
     if (totalPages <= 1) {
-      return null; // totalPages가 1 이하면 버튼을 렌더링하지 않음
+      return null;
     }
 
     const buttons = [];
@@ -129,10 +169,7 @@ const Main = () => {
       buttons.push(
         <button
           key={i}
-          onClick={() => {
-            console.log(`페이지 이동 버튼 클릭: ${i}`); // 페이지 이동 버튼 클릭 로그 추가
-            goToPage(i);
-          }}
+          onClick={() => goToPage(i)}
           className={currentPage === i ? styles.activePage : styles.pageButton}
         >
           {i}
@@ -150,7 +187,7 @@ const Main = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1> 📜 </h1>
-        <button onClick={openModal} className={styles.createButton}>
+        <button onClick={openCreateModal} className={styles.createButton}>
           보드 등록
         </button>
       </div>
@@ -160,7 +197,7 @@ const Main = () => {
             <div
               key={board.boardId}
               className={styles.boardItem}
-              onClick={() => navigate(`/board/${board.boardId}`)}
+              onClick={() => navigate(`/board/${board.boardId}`)} // 클릭 시 컬럼 페이지로 이동
             >
               <div className={styles.boardItemContent}>
                 <div className={styles.boardItemId}>{board.boardId}</div>
@@ -169,38 +206,54 @@ const Main = () => {
                 <div className={styles.boardItemIntro}>{board.intro}</div>
                 <div className={styles.boardItemDate}>{board.createdAt}</div>
               </div>
+              <div className={styles.boardItemButtons}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation(); // 부모 요소의 클릭 이벤트 전파 방지
+                    openEditModal(board.boardId);
+                  }}
+                  className={styles.updateButton}
+                >
+                  🔨
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation(); // 부모 요소의 클릭 이벤트 전파 방지
+                    handleDeleteBoard(board.boardId);
+                  }}
+                  className={styles.deleteButton}
+                >
+                  ❌
+                </button>
+                {/* 보드 초대 버튼 */}
+                <InviteBoard boardId={board.boardId} />
+              </div>
             </div>
           ))}
         </div>
       </div>
       <div className={styles.pagination}>
         <button
-          onClick={() => {
-            console.log(`◀ 버튼 클릭: ${currentPage - 1}`); // 이전 페이지 버튼 클릭 로그 추가
-            goToPage(currentPage - 1);
-          }}
+          onClick={() => goToPage(currentPage - 1)}
           disabled={currentPage === 1}
         >
           ◀
         </button>
         {renderPaginationButtons()}
         <button
-          onClick={() => {
-            console.log(`▶ 버튼 클릭: ${currentPage + 1}`); // 다음 페이지 버튼 클릭 로그 추가
-            goToPage(currentPage + 1);
-          }}
+          onClick={() => goToPage(currentPage + 1)}
           disabled={currentPage === totalPages}
         >
           ▶
         </button>
       </div>
-      <form onSubmit={handlePageNumberSubmit}></form>
+
       <Modal
-        isOpen={isModalOpen}
+        isOpen={isCreateModalOpen}
         onRequestClose={closeModal}
         style={customModalStyles}
       >
-        <h2 className={styles.modalTitle}> 📝 </h2>
+        <h2 className={styles.modalTitle}>📝</h2>
         <input
           className={styles.modalInput}
           type="text"
@@ -216,14 +269,31 @@ const Main = () => {
           onChange={(e) => setIntro(e.target.value)}
         />
         <div className={styles.modalButtons}>
-          <button className={styles.modalButton} onClick={handleCreateBoard}>
+          <button className={styles.modalButton1} onClick={handleCreateBoard}>
             등록
           </button>
-          <button className={styles.modalButton} onClick={closeModal}>
+          <button className={styles.modalButton2} onClick={closeModal}>
             취소
           </button>
         </div>
       </Modal>
+
+      {/* 보드 수정 모달 */}
+      {isEditModalOpen && (
+        <Modal
+          isOpen={isEditModalOpen}
+          onRequestClose={closeModal}
+          style={customModalStyles}
+        >
+          <UpdateBoard
+            boardId={editBoardId}
+            title={title}
+            intro={intro}
+            closeModal={closeModal}
+            fetchData={fetchData}
+          />
+        </Modal>
+      )}
     </div>
   );
 };
