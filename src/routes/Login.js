@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./Login.module.scss";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { baseUrl } from "../App";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,10 +16,7 @@ const Login = () => {
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/users/login",
-        formData
-      );
+      const response = await axios.post(`${baseUrl}/api/users/login`, formData);
 
       console.log("로그인 성공:", response.data);
       localStorage.setItem("accessToken", response.data.data.accessToken);
