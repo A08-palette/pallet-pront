@@ -9,7 +9,7 @@ import Columns from "../components/columns/Columns";
 const Board = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
-  const [columnList, setColumnList] = useState([]);
+  const [columnList, setColumnList] = useState({});
 
   const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ const Board = () => {
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
   const getBoardInfo = async () => {
     try {
@@ -48,13 +48,13 @@ const Board = () => {
 
   const getColumns = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/api/board/${id}/columns`, {
+      const response = await axios.get(`${baseUrl}/api/boards/${id}/columns`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       console.log("response", response);
-      setColumnList(response.data);
+      setColumnList(response.data.data);
     } catch (err) {
       console.error(err);
     }
@@ -63,7 +63,10 @@ const Board = () => {
   if (isLoading) {
     return <div>로딩중입니다...</div>;
   }
-  console.log(columnList.length);
+
+  Object.values(columnList).map((e) => {
+    console.log(e, 111);
+  });
   return (
     <div className={styles.form}>
       <div className={styles.createBoard_wrapper}>
@@ -72,12 +75,13 @@ const Board = () => {
           컬럼 등록
         </button>
       </div>
-
       <div className={styles.columnList_wrapper}>
-        {Array.isArray(columnList) && columnList.length > 0 ? (
-          columnList.map((e) => <Columns columnInfo={e} key={e.id} />)
+        {Object.keys(columnList).length > 0 ? (
+          Object.values(columnList).map((column) => (
+            <Columns key={column.id} columnInfo={column} />
+          ))
         ) : (
-          <div>컬럼이 없습니다.</div>
+          <div>컬럼이 없습니다</div>
         )}
       </div>
     </div>

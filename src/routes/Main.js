@@ -11,8 +11,8 @@ const Main = () => {
 
   const navigate = useNavigate();
 
-  const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZTUiLCJyb2xlIjoiTUFOQUdFUiIsImlhdCI6MTcyMDg2NTk4MCwiZXhwIjoxODIwODY1OTgwfQ.FZ40qZvitItAhtzcfz4AvBAs8pBP3M1ZtbzA8GPLlL8";
+  const token = localStorage.getItem("accessToken");
+
   useEffect(() => {
     setIsLoading(true);
     getBoards();
