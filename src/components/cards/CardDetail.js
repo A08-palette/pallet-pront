@@ -42,8 +42,6 @@ const CardDetail = ({ setIsDetailView, cardId }) => {
     }
   };
 
-  // console.log("commentList", commentList.data);
-
   return (
     <div>
       <div>
