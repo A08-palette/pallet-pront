@@ -1,11 +1,11 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Card from "../cards/Card";
 import styles from "./Columns.module.scss";
 import axios from "axios";
 import { baseUrl } from "../../App";
 import { useParams } from "react-router-dom";
 
-const Columns = ({ columnInfo }) => {
+const Columns = ({ columnInfo, boardSize }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isCreate, setIsCreate] = useState(false);
   const [cardTitle, setCardTitle] = useState("");
@@ -16,16 +16,29 @@ const Columns = ({ columnInfo }) => {
 
   const { id } = useParams();
 
-  const dragItem = useRef();
-  const dragOverItem = useRef();
-
   const token = localStorage.getItem("accessToken");
+
+  const getCards = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `${baseUrl}/api/cards/column?column=${columnId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setCardList(response.data.data);
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
     getCards();
-    setIsLoading(false);
-  }, []);
+  }, [getCards]);
 
   const createCard = async () => {
     try {
@@ -44,65 +57,10 @@ const Columns = ({ columnInfo }) => {
       );
       alert("카드생성완료");
       setIsCreate(false);
+      setIsLoading(true);
       getCards();
     } catch (err) {
       console.error(err);
-    }
-  };
-
-  const getCards = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/api/cards/column?column=${columnId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setCardList(response.data.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const moveCard = async (cardId, newPosition) => {
-    try {
-      const response = await axios.put(
-        `${baseUrl}/api/cards/${cardId}/move?position=${newPosition}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      console.log(response);
-      getCards();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleDragStart = (e, cardId) => {
-    // Set the data to be transferred during the drag
-    console.log(cardId);
-    e.dataTransfer.setData("text/plain", cardId);
-  };
-
-  const handleDragOver = (e) => {
-    // Prevent default to allow drop
-    e.preventDefault();
-  };
-
-  const handleDrop = (e, columnIndex) => {
-    e.preventDefault();
-
-    const cardId = e.dataTransfer.getData("text/plain");
-    const draggedCard = cardList.find(
-      (card) => card.cardId === parseInt(cardId)
-    );
-
-    if (draggedCard) {
-      const newPosition = columnIndex + 1; // Since position starts from 1 in your API (assuming)
-      console.log(draggedCard.cardId);
-      moveCard(draggedCard.cardId, newPosition);
     }
   };
 
@@ -117,15 +75,14 @@ const Columns = ({ columnInfo }) => {
       <div className={styles.card_wrapper}>
         {Object.keys(cardList).length > 0 ? (
           Object.values(cardList).map((card, index) => (
-            <div
-              onDragOver={(e) => handleDragOver(e)}
-              onDrop={(e) => handleDrop(e, columnInfo.id)}
-              key={card.cardId}
-              draggable
-              onDragStart={(e) => handleDragStart(e, card.cardId)}
-            >
-              <Card cardInfo={card} />
-            </div>
+            <Card
+              key={index}
+              cardInfo={card}
+              columnPosition={columnInfo.position}
+              setIsLoading={setIsLoading}
+              getCards={getCards}
+              boardSize={boardSize}
+            />
           ))
         ) : (
           <div>카드가 없습니다</div>
