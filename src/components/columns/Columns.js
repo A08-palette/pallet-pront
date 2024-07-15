@@ -18,7 +18,7 @@ const Columns = ({ columnInfo, boardSize }) => {
 
   const token = localStorage.getItem("accessToken");
 
-  const getCards = useCallback(async () => {
+  const getCards = async () => {
     try {
       const response = await axios.get(
         `${baseUrl}/api/cards/column?column=${columnId}`,
@@ -33,7 +33,7 @@ const Columns = ({ columnInfo, boardSize }) => {
     } catch (err) {
       console.error(err);
     }
-  }, []);
+  };
 
   useEffect(() => {
     setIsLoading(true);

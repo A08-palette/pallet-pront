@@ -29,6 +29,8 @@ const Card = ({
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      alert(response.data.message);
+      getCards();
     } catch (err) {
       console.error(err);
     }
@@ -43,6 +45,7 @@ const Card = ({
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      alert(response.data.message);
     } catch (err) {
       console.error(err);
     }
@@ -73,7 +76,7 @@ const Card = ({
         `${baseUrl}/api/cards/${cardInfo.cardId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log(response);
+      alert(response.data.message);
     } catch (err) {
       console.error(err);
     }
