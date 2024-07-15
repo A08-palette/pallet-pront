@@ -154,6 +154,7 @@ const Board = () => {
               <Columns
                 key={column.id}
                 columnInfo={column}
+                boardSize={columnList.length}
                 handleColumnPositionChange={handleColumnPositionChange}
               />
             </div>
