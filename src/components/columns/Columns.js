@@ -38,7 +38,8 @@ const Columns = ({ columnInfo, boardSize }) => {
   useEffect(() => {
     setIsLoading(true);
     getCards();
-  }, [getCards]);
+    setIsLoading(false);
+  }, []);
 
   const createCard = async () => {
     try {
@@ -57,7 +58,6 @@ const Columns = ({ columnInfo, boardSize }) => {
       );
       alert("카드생성완료");
       setIsCreate(false);
-      setIsLoading(true);
       getCards();
     } catch (err) {
       console.error(err);
